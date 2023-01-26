@@ -3,10 +3,6 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center mt-5">
-            <div class="d-flex justify-content-center mb-4">
-                <a href="{{ route('home') }}" class="btn btn-primary btn-block active">Active Projects</a>
-                <a href="{{ route('expired-list-page') }}" class="btn btn-secondary btn-block ms-3">Expired Projects</a>
-            </div>
             @if (session()->has('success'))
                 <div class="col-md-12">
                     <div class="alert alert-success">
@@ -17,42 +13,34 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Product List</h4>
+                        <h4>Project List</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Title</th>
-                                        <th>Price</th>
-                                        <th>Description</th>
-                                        <th>Deadline</th>
-                                        <th>File</th>
-                                        <th>Action</th>
+                                        <th>Project Title</th>
+                                        <th>User Name</th>
+                                        <th>Download</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @if (count($products) > 0)
                                         @foreach ($products as $product)
                                             <tr>
-                                                <td>{{ $product->title }}</td>
-                                                <td>{{ $product->price }} $</td>
-                                                <td>{{ $product->desc }}</td>
-                                                <td>{{ $product->deadline }}</td>
+                                                <?php $productTitle = DB::table('products')
+                                                    ->where('id', $product->product_id)
+                                                    ->first(); ?>
+                                                <td>{{ $productTitle->title }}</td>
+                                                <?php $userName = DB::table('users')
+                                                    ->where('id', $product->user_id)
+                                                    ->first(); ?>
+                                                <td>{{ $userName->name }}</td>
                                                 <td>
                                                     @if ($product->file != '')
                                                         <a href="{{ asset("uploads/zip/$product->file") }}">Download</a>
                                                     @endif
-                                                </td>
-                                                <td>
-                                                    <a href="{{ route('project-list', ['id' => $product->id]) }}"
-                                                        class="btn btn-sm btn-info">Projects</a>
-                                                    <a href="{{ route('edit-page', ['id' => $product->id]) }}"
-                                                        class="btn btn-sm btn-warning">Edit</a>
-                                                    <a href="{{ route('delete-product', ['id' => $product->id]) }}"
-                                                        onclick="return confirm('Are you sure ?')"
-                                                        class="btn btn-sm btn-danger">Delete</a>
                                                 </td>
                                             </tr>
                                         @endforeach

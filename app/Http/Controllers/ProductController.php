@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\ProjectBid;
 
 class ProductController extends Controller
 {
@@ -40,9 +41,21 @@ class ProductController extends Controller
 
     public function listPage(Request $req)
     {
-        $products = Product::orderBy("id","desc")->paginate(15);
 
+        $products = Product::where("deadline",">",date("Y-m-d H:i:s"))->orderBy("id","desc")->paginate(15);
         return view("admin.list-product",compact("products"));
+    }
+
+    public function projectList($id)
+    {
+        $products = ProjectBid::where("product_id",$id)->orderBy("id","desc")->paginate(15);
+        return view("admin.project-list",compact("products"));
+    }
+
+    public function expiredProductList(Request $req)
+    {
+        $products = Product::where("deadline","<",date("Y-m-d H:i:s"))->orderBy("id","desc")->paginate(15);
+        return view("admin.expired-product-list",compact("products"));
     }
 
     public function editPage($id)

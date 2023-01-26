@@ -4,8 +4,8 @@
     <div class="container">
         <div class="row mt-5 justify-content-center">
             <div class="d-flex justify-content-center mb-4">
-                <a href="{{ route('home') }}" class="btn btn-primary btn-block active">Active Projects</a>
-                <a href="{{ route('expired-products') }}" class="btn btn-secondary btn-block ms-3">Expired Projects</a>
+                <a href="{{ route('home') }}" class="btn btn-secondary btn-block active">Active Projects</a>
+                <a href="{{ route('expired-products') }}" class="btn btn-primary btn-block ms-3">Expired Projects</a>
             </div>
             @if (count($products) > 0)
                 @foreach ($products as $product)
@@ -14,8 +14,7 @@
                             <div class="card-body">
                                 <div class="row p-2 bg-white rounded">
                                     <div class="col-md-8 mt-1">
-                                        <h5 class="text-primary"><a
-                                                href="{{ route('project', $product->id) }}">{{ $product->title }}</a></h5>
+                                        <h5 class="text-primary">{{ $product->title }}</h5>
                                         @php
                                             $strCount = strlen($product->desc);
                                         @endphp
