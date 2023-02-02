@@ -11,11 +11,11 @@ class ProjectBidController extends Controller
         return view("front.project",compact("id"));
     }
 
-    public function submitProject(Request $req){
+    public function submitProject(Request $req){ 
         $this->validate($req,[
             "title" => "required",
             "description" => "required",
-            "file" => "required",
+            "file" => "required|mimes:zip,rar,7zip,pdf,doc,docx,png,jpg,jpeg,gif,svg,webp",
         ]);
 
         $bid = new ProjectBid();

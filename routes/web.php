@@ -20,9 +20,8 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/',[FrontendController::class,"index"])->name("home");
 Route::get('/expired-products',[FrontendController::class,"expiredProducts"])->name("expired-products");
 Route::get('/project/{id}',[ProjectBidController::class,"project"])->name("project");
-Route::post('/submit-project',[ProjectBidController::class,"submitProject"])->name("submit-project");
+Route::get('/view-projects/{id}',[FrontendController::class,"projects"])->name("projects");
 
- 
 Auth::routes();
 
 Route::get("/admin",function(){
@@ -41,8 +40,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get("/project-list/{id}",[ProductController::class,"projectList"])->name("project-list");
     Route::get("/edit-product/{id}",[ProductController::class,"editPage"])->name("edit-page");
     Route::post("/update-product",[ProductController::class,"update"])->name("update-product");
-
     Route::get("/delete-product/{id}",[ProductController::class,"delete"])->name("delete-product");
+
+    Route::post("/update-project-status",[ProjectBidController::class,"updateStatus"])->name("update-project-status");
 });
 
 Route::middleware(['auth'])->group(function () {

@@ -19,12 +19,14 @@ class ProductController extends Controller
             "title" => "required",
             "price" => "required",
             "deadline" => "required",
+            "notes" => "required",
         ]);
 
         $product = new Product();
         $product->title = $req->title;
         $product->price = $req->price;
         $product->desc = $req->desc;
+        $product->notes = $req->notes;
         $product->deadline = $req->deadline;
         
         if($req->hasFile("zip"))
@@ -71,12 +73,14 @@ class ProductController extends Controller
             "title" => "required",
             "price" => "required",
             "deadline" => "required",
+            "notes" => "required",
         ]);
 
         $product = Product::find($req->productId);
         $product->title = $req->title;
         $product->price = $req->price;
         $product->desc = $req->desc;
+        $product->notes = $req->notes;
         $product->deadline = $req->deadline;
         
         if($req->hasFile("zip"))
@@ -115,6 +119,19 @@ class ProductController extends Controller
         }
         $product->delete();
         session()->flash("success","Product deleted successfully");
+        return redirect()->back();
+    }
+
+    public function updateProjectStatus(Request $req)
+    {
+        $this->validate($req,[
+            "status" => "required",
+        ]);
+
+        $project = ProjectBid::find($req->id);
+        $project->status = $req->status;
+        $project->save();
+        session()->flash("success","Project status updated successfully");
         return redirect()->back();
     }
 }

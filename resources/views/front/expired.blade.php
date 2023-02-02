@@ -13,7 +13,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row p-2 bg-white rounded">
-                                    <div class="col-md-8 mt-1">
+                                    <div class="col-md-7 mt-1">
                                         <h5 class="text-primary">{{ $product->title }}</h5>
                                         @php
                                             $strCount = strlen($product->desc);
@@ -27,8 +27,23 @@
                                             @endif
                                         </p>
                                     </div>
-                                    <div class="text-end col-md-4 border-left mt-1">
-                                        <h4 class="mr-1">${{ $product->price }}</h4>
+                                    <div class="text-end col-md-5 border-left mt-1">
+                                        <div class="d-flex justify-content-end">
+                                            <a class="btn btn-sm btn-outline-primary mb-4 me-2"
+                                                onclick='viewNotes("{{ $product->title }}", "{{ $product->notes }}")'>
+                                                Important Notes
+                                            </a>
+                                            <?php $projects = App\Models\ProjectBid::where('product_id', $product->id)->get(); ?>
+                                            <a href="view-projects/{{ $product->id }}"
+                                                class="btn btn-sm btn-outline-success mb-4 me-2">
+                                                @if (count($projects) > 0)
+                                                    {{ count($projects) }} works submitted
+                                                @else
+                                                    No work submitted
+                                                @endif
+                                            </a>
+                                            <h4 class="mr-1">${{ $product->price }}</h4>
+                                        </div>
                                         <div class="d-flex flex-column mt-5 align-items-end">
                                             @php
                                                 $diff = \Carbon\Carbon::parse($product->deadline)->diffInDays();
@@ -73,6 +88,24 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('custom_script')
@@ -89,5 +122,11 @@
 
             });
         });
+
+        function viewNotes(title, notes) {
+            $("#exampleModalLabel").html(title);
+            $(".modal-body").html(notes);
+            $("#exampleModal").modal("show");
+        }
     </script>
 @endsection

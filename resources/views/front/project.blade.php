@@ -36,7 +36,8 @@
                             </div>
                             <div class="col-md-12 mb-4">
                                 <label class="mb-2">File</label>
-                                <input type="file" class="form-control" name="file" accept=".zip,.rar,.7zip">
+                                <input type="file" class="form-control" name="file"
+                                    accept=".zip,.rar,.7zip,.pdf,.doc,.docx,.png,.jpg,.jpeg,.gif,.svg,.webp">
                                 @error('file')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror

@@ -23,6 +23,7 @@
                                         <th>Project Title</th>
                                         <th>User Name</th>
                                         <th>Download</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -41,6 +42,28 @@
                                                     @if ($product->file != '')
                                                         <a href="{{ asset("uploads/zip/$product->file") }}">Download</a>
                                                     @endif
+                                                </td>
+                                                <td class="w-25">
+                                                    <form action="{{ route('update-project-status') }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{ $product->id }}">
+                                                        <div class="form-group d-flex">
+                                                            <select name="status" id="status"
+                                                                class="form-control project_status">
+                                                                <option value="pending"
+                                                                    {{ $product->status == 'pending' ? 'selected' : '' }}>
+                                                                    Pending</option>
+                                                                <option value="approved"
+                                                                    {{ $product->status == 'approved' ? 'selected' : '' }}>
+                                                                    Approved</option>
+                                                                <option value="rejected"
+                                                                    {{ $product->status == 'rejected' ? 'selected' : '' }}>
+                                                                    Rejected</option>
+                                                            </select>
+                                                            <button type="submit"
+                                                                class="btn btn-primary ms-2">Update</button>
+                                                        </div>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         @endforeach
