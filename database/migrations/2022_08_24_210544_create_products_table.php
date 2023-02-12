@@ -17,7 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string("title");
             $table->string("price");
+            $table->string("price_per_work");
             $table->text("desc")->nullable();
+            $table->text("notes")->nullable();
             $table->date("deadline");
             $table->string("file")->nullable();
             $table->timestamps();

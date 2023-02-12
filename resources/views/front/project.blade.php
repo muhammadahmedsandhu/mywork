@@ -2,14 +2,21 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center mt-5">
-            @if (session()->has('success'))
-                <div class="col-md-7">
-                    <div class="alert alert-success">
-                        {{ session()->get('success') }}
-                    </div>
-                </div>
-            @endif
             <div class="col-md-7">
+                <div class="flash-message">
+                    @if (Session::has('alert-danger'))
+                        <p class="alert alert-danger d-flex align-items-center">
+                            {{ Session::get('alert-danger') }}
+                            <a href="{{ route('profile') }}" class="ms-2">(Go to profile)</a>
+                        </p>
+                    @endif
+                    @if (Session::has('alert-success'))
+                        <p class="alert alert-success d-flex align-items-center">
+                            {{ Session::get('alert-success') }}
+                            <a href="{{ '/' }}view-projects/{{ $id }}" class="ms-2">(View Projects)</a>
+                        </p>
+                    @endif
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h4>Submit Project</h4>

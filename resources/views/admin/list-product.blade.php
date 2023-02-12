@@ -4,7 +4,7 @@
     <div class="container">
         <div class="row justify-content-center mt-5">
             <div class="d-flex justify-content-center mb-4">
-                <a href="{{ route('home') }}" class="btn btn-primary btn-block active">Active Projects</a>
+                <a href="{{ route('list-page') }}" class="btn btn-primary btn-block active">Active Projects</a>
                 <a href="{{ route('expired-list-page') }}" class="btn btn-secondary btn-block ms-3">Expired Projects</a>
             </div>
             @if (session()->has('success'))

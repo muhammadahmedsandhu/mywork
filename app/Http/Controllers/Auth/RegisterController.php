@@ -8,6 +8,8 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\MailController;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
@@ -50,7 +52,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'user_name' => ['required', 'string', 'max:255'],
+            'user_name' => ['required', 'string', 'max:255', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -62,15 +64,36 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\Models\User
      */
-    protected function create(array $data)
+    
+     public function register(Request $request)
     {
-        return User::create([
-            'user_name' => $data['user_name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $this->validator($request->all())->validate();
+        $user = new User;
+        $user->user_name = $request->user_name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->verification_code = mt_rand(100000, 999999);
+        $user->save();
 
-        // redirect to email verification
-        
+        if($user != null){
+            MailController::sendSignupEmail($user->name, $user->email, $user->verification_code);
+            return redirect()->back()->with(session()->flash('alert-success', 'Your account has been created. Please check your email to verify your account.'));
+        }
+
+        return redirect()->back()->with(session()->flash('alert-danger', 'Something went wrong. Please try again.'));
+    }
+
+    // create verifyUser function and get code from url
+    public function verifyUser(Request $request)
+    {
+        $verification_code = $request->query('code');
+        $user = User::where('verification_code', $verification_code)->first();
+        if($user != null){
+            $user->email_verified_at = now();
+            $user->is_verified = 1;
+            $user->save();
+            return redirect()->route('login')->with(session()->flash('alert-success', 'Your account has been verified. Please login to continue.'));
+        }
+        return redirect()->route('login')->with(session()->flash('alert-danger', 'Something went wrong. Please try again.'));
     }
 }

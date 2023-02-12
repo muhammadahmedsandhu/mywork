@@ -20,6 +20,9 @@ return new class extends Migration
             $table->string("title");
             $table->text("description");
             $table->string("file")->nullable();
+            $table->string("status")->default("pending");
+            $table->string('pending_payment')->default(0);
+            $table->string('cleared_payment')->default(0);
             $table->timestamps();
         });
     }

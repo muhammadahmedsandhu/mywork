@@ -12,12 +12,13 @@ class ProductController extends Controller
     {
         return view("admin.create-product");
     }
-
+ 
     public function storeProduct(Request $req)
     {
         $this->validate($req,[
             "title" => "required",
             "price" => "required",
+            "price_per_work" => "required",
             "deadline" => "required",
             "notes" => "required",
         ]);
@@ -25,6 +26,7 @@ class ProductController extends Controller
         $product = new Product();
         $product->title = $req->title;
         $product->price = $req->price;
+        $product->price_per_work = $req->price_per_work;
         $product->desc = $req->desc;
         $product->notes = $req->notes;
         $product->deadline = $req->deadline;
@@ -43,7 +45,6 @@ class ProductController extends Controller
 
     public function listPage(Request $req)
     {
-
         $products = Product::where("deadline",">",date("Y-m-d H:i:s"))->orderBy("id","desc")->paginate(15);
         return view("admin.list-product",compact("products"));
     }

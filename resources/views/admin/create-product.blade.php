@@ -35,6 +35,14 @@
                                 @enderror
                             </div>
                             <div class="col-md-12 mb-4">
+                                <label class="mb-2">Price Per Work</label>
+                                <input type="number" class="form-control @error('price_per_work') is-invalid @enderror"
+                                    placeholder="Product price per work..." name="price_per_work">
+                                @error('price_per_work')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-md-12 mb-4">
                                 <label class="mb-2">Description</label>
                                 <textarea class="form-control " placeholder="Description..." name="desc"></textarea>
                             </div>

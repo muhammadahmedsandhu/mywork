@@ -25,8 +25,13 @@ return new class extends Migration
             $table->string('account_number')->nullable();
             $table->string('account_name')->nullable();
             $table->string('head_line')->nullable();
+            $table->string('image')->nullable();
             $table->string('summary')->nullable();
+            $table->tinyInteger("is_profile_completed")->default(0);
             $table->tinyInteger("is_admin")->default(0);
+            $table->tinyInteger("is_blocked")->default(0);
+            $table->string('verification_code')->nullable();
+            $table->tinyInteger("is_verified")->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

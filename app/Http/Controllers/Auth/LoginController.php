@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -36,5 +37,18 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+    
+    protected function authenticated(Request $request, $user)
+    {
+        if (!$user->is_verified) {
+            auth()->logout();
+            return redirect()->back()->with(session()->flash('alert-danger', 'Your account is not verified. Please check your email for verification link.'));
+        }
+        if ($user->is_blocked) {
+            auth()->logout();
+            return redirect()->back()->with(session()->flash('alert-danger', 'Your account is blocked. Please contact site admin.'));
+        }
+        return redirect()->intended($this->redirectPath());
     }
 }

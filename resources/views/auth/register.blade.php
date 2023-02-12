@@ -4,6 +4,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
+                @include('layouts.errorsAlert')
                 <div class="card">
                     <div class="card-header">{{ __('Register') }}</div>
 
@@ -15,7 +16,7 @@
                                 <label for="user_name"
                                     class="col-md-4 col-form-label text-md-end">{{ __('User Name') }}</label>
                                 <div class="col-md-6">
-                                    <input id="name" type="text"
+                                    <input id="user_name" type="text"
                                         class="form-control @error('user_name') is-invalid @enderror" name="user_name"
                                         value="{{ old('user_name') }}" required autocomplete="user_name"
                                         placeholder="User name should be unique" autofocus>

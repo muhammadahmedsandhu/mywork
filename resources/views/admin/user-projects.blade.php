@@ -7,7 +7,7 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Project List</h4>
+                        <h4>Approved Projects</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -15,44 +15,37 @@
                                 <thead>
                                     <tr>
                                         <th>Project Title</th>
-                                        <th>User Name</th>
-                                        <th>Download</th>
-                                        <th>Status</th>
+                                        <th>Amount</th>
+                                        <th>Payment Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if (count($products) > 0)
-                                        @foreach ($products as $product)
+                                    @if (count($projects) > 0)
+                                        @foreach ($projects as $project)
+                                            <?php
+                                            $projectDetail = DB::table('products')
+                                                ->where('id', $project->product_id)
+                                                ->first();
+                                            ?>
                                             <tr>
-                                                <?php $productTitle = DB::table('products')
-                                                    ->where('id', $product->product_id)
-                                                    ->first(); ?>
-                                                <td>{{ $productTitle->title }}</td>
-                                                <?php $userName = DB::table('users')
-                                                    ->where('id', $product->user_id)
-                                                    ->first(); ?>
-                                                <td>{{ $userName->user_name }}</td>
+                                                <td>{{ $projectDetail->title }}</td>
                                                 <td>
-                                                    @if ($product->file != '')
-                                                        <a href="{{ asset("uploads/zip/$product->file") }}">Download</a>
-                                                    @endif
+                                                    {{ $projectDetail->price_per_work }}
                                                 </td>
                                                 <td class="w-25">
-                                                    <form action="{{ route('update-project-status') }}" method="POST">
+                                                    <form action="{{ route('update-payment-status') }}" method="POST">
                                                         @csrf
-                                                        <input type="hidden" name="id" value="{{ $product->id }}">
+                                                        <input type="hidden" name="id" value="{{ $project->id }}">
                                                         <div class="form-group d-flex">
-                                                            <select name="status" id="status"
+                                                            <select name="payment_status" id="status"
                                                                 class="form-control project_status">
-                                                                <option value="pending"
-                                                                    {{ $product->status == 'pending' ? 'selected' : '' }}>
-                                                                    Pending</option>
                                                                 <option value="approved"
-                                                                    {{ $product->status == 'approved' ? 'selected' : '' }}>
+                                                                    {{ $project->cleared_payment > 0 ? 'selected' : '' }}>
                                                                     Approved</option>
-                                                                <option value="rejected"
-                                                                    {{ $product->status == 'rejected' ? 'selected' : '' }}>
-                                                                    Rejected</option>
+                                                                <option value="pending"
+                                                                    {{ $project->cleared_payment == 0 ? 'selected' : '' }}>
+                                                                    Pending
+                                                                </option>
                                                             </select>
                                                             <button type="submit"
                                                                 class="btn btn-primary ms-2">Update</button>
@@ -70,7 +63,7 @@
                             </table>
                         </div>
                         <div class="d-flex justify-content-center">
-                            {{ $products->links('pagination::bootstrap-5') }}
+                            {{ $projects->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
